@@ -11,11 +11,11 @@ nanoESP32-C3
 
 # nanoESP32-S2 Introduce
 nanoESP32-C3 is ESP32-C3 dev board made by MuseLab, base on ESP32-C3 Modules manufactured by Expressif, with on-board usb-to-serial, TYPE-C, RGB LED,  the on-board programmer ESPLink (based on DAPLink) support usb-to-serial (compatible with traditional use), drag-n-drop program, and jtag debug, made it convenient for development and test.  
-![nanoESP32-S2](https://github.com/wuxx/nanoesp32-s2/blob/master/doc/nanoESP32-S2.jpg)
+![nanoESP32-c3](https://github.com/wuxx/nanoesp32-c3/blob/master/doc/nanoESP32-c3.jpg)
 
 # Module Specifications 
 nanoESP32-C3 use the ESP32-C3-MINI-1 module manufactured by Expressif, here are key features   
-Module|PCB Antenna | IPEX Antenna|PSRAM|
+Component|Detail | 
 ----|----|
 MCU         | 32bit RISC-V ESP32-C3FN4 up to 160MHz |
 ROM         | 384KB |
@@ -58,15 +58,15 @@ $esptool.py --chip esp32c3 \
 ```
   
 ## Drag-and-Drop Program
-the ESPLink support drag-n-drop program, after power on the board, a virtual USB Disk named "ESPLink" will appear, just drag the flash image into the ESPLink, wait for some seconds, then the ESPLink will automatically complete the program work. it's very convenient since it's no need to rely on external tools and work well on any platform (Win/Linux/Mac .etc), some typical usage scenarios: quickly verification, compile on cloud server and program on any PC, firmware upgrade when apply on commercial products .etc  
-note: the flash image is a splicing of three files (bootloader.bin/partition-table.bin/app.bin), just expand the bootloader.bin to size 0x8000, expand the partition-table.bin to size 0x10000, and concatenate these three files, use the script esppad.sh under tools directory to make it, example for reference:    
+the ESPLink support drag-n-drop program, after power on the board, a virtual USB Disk named `ESPLink` will appear, just drag the flash image into the ESPLink, wait for some seconds, then the ESPLink will automatically complete the program work. it's very convenient since it's no need to rely on external tools and work well on any platform (Win/Linux/Mac .etc), some typical usage scenarios: quickly verification, compile on cloud server and program on any PC, firmware upgrade when used on commercial products .etc  
+note: the flash image is a splicing of three files (bootloader.bin/partition-table.bin/app.bin), just expand the `bootloader.bin` to size 0x8000, expand the `partition-table.bin` to size 0x10000, and concatenate these three files, use the script `esppad.sh` under tools directory to make it, example for reference:    
 ```
 $./tools/esppad.sh bootloader.bin partition-table.bin app.bin flash_image.bin
 ```
 
 
 ## JTAG Debug
-ESPLink support jtag interface to debug the ESP32-C3, it's useful for those who are interest with RISC-V assembly language, or for product developer to fix the bug when system crash, here are the instructions
+ESPLink support jtag interface to debug the ESP32-C3, it's useful for those hobbyist who are interested with RISC-V assembly language, or for product developer to fix the bug when system crash, here are the instructions
 ### Openocd Install  
 ```
 $git clone https://github.com/espressif/openocd-esp32.git
@@ -76,10 +76,17 @@ $./configure --enable-cmsis-dap
 $make -j
 $sudo make install
 ```
-### Attach to MCU
+
+### Burn the efuse
+the efuse JTAG_SEL_ENABLE should be burned to enable the jtag function.
 ```
-$cd nanoESP32-C3/
-$sudo openocd -f tools/esp32c3-cmsis-dap.cfg
+$espefuse.py -p /dev/ttyUSB0 burn_efuse JTAG_SEL_ENABLE
+```
+
+### Attach to ESP32-C3
+set GPIO10 to 0 for choose the GPIO function to JTAG, then power on the board and execute the attach script  
+```
+$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg
 ```
 
 ### Debug
