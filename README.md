@@ -11,7 +11,7 @@ nanoESP32-C3
 
 # nanoESP32-S2 Introduce
 nanoESP32-C3 is ESP32-C3 dev board made by MuseLab, base on ESP32-C3 Modules manufactured by Expressif, with on-board usb-to-serial, TYPE-C, RGB LED,  the on-board programmer ESPLink (based on DAPLink) support usb-to-serial (compatible with traditional use), drag-n-drop program, and jtag debug, made it convenient for development and test.  
-![nanoESP32-c3](https://github.com/wuxx/nanoesp32-c3/blob/master/doc/nanoESP32-c3.jpg)
+![nanoESP32-c3](https://github.com/wuxx/nanoesp32-c3/blob/main/doc/nanoESP32-C3-1.jpg)
 
 # Module Specifications 
 nanoESP32-C3 use the ESP32-C3-MINI-1 module manufactured by Expressif, here are key features   
