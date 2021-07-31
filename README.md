@@ -80,13 +80,38 @@ $sudo make install
 ### Burn the efuse
 the efuse JTAG_SEL_ENABLE should be burned to enable the jtag function.
 ```
-$espefuse.py -p /dev/ttyUSB0 burn_efuse JTAG_SEL_ENABLE
+$espefuse.py -p /dev/ttyACM0 burn_efuse JTAG_SEL_ENABLE
 ```
 
 ### Attach to ESP32-C3
 set GPIO10 to 0 for choose the GPIO function to JTAG, then power on the board and execute the attach script  
 ```
 $sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg
+Open On-Chip Debugger  v0.10.0-esp32-20201202-30-gddf07692 (2021-03-22-16:48)
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+adapter speed: 10000 kHz
+
+force hard breakpoints
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : CMSIS-DAP: SWD  Supported
+Info : CMSIS-DAP: JTAG Supported
+Info : CMSIS-DAP: FW Version = 0255
+Info : CMSIS-DAP: Serial# = 0800000100430028430000014e504332a5a5a5a597969908
+Info : CMSIS-DAP: Interface Initialised (JTAG)
+Info : SWCLK/TCK = 1 SWDIO/TMS = 1 TDI = 1 TDO = 1 nTRST = 0 nRESET = 1
+Info : CMSIS-DAP: Interface ready
+Info : High speed (adapter_khz 10000) may be limited by adapter firmware.
+Info : clock speed 10000 kHz
+Info : cmsis-dap JTAG TLR_RESET
+Info : cmsis-dap JTAG TLR_RESET
+Info : JTAG tap: esp32c3.cpu tap/device found: 0x00005c25 (mfg: 0x612 (Espressif Systems), part: 0x0005, ver: 0x0)
+Info : datacount=2 progbufsize=16
+Info : Examined RISC-V core; found 1 harts
+Info :  hart 0: XLEN=32, misa=0x40101104
+Info : Listening on port 3333 for gdb connections
 ```
 
 ### Debug

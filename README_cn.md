@@ -1,86 +1,149 @@
-nanoESP32-S2
+nanoESP32-C3
 -----------
-[中文](./README.md) [English](./README_en.md)
+[中文](./README_cn.md) [English](./README.md)
 
-* [nanoESP32-S2介绍](#nanoESP32-S2介绍) 
+* [nanoESP32-C3介绍](#nanoESP32-C3介绍) 
 * [模组规格](#模组规格)
-* [ESP32-S2 vs ESP32](#ESP32-S2-vs-ESP32)
-* [demo说明](#demo说明)
+* [ESPLink](#ESPLink)
 * [产品链接](#产品链接)
 * [参考](#参考)
 
 
-# nanoESP32-S2介绍
-nanoESP32-S2 是MuseLab基于乐鑫ESP32-S2系列模组推出的开发板，板载USB转串口，TYPE-C、全彩LED，引脚兼容官方开发板，同时引出调试烧录串口和ESP32-S2本身的USB接口，更方便日常的开发测试。
+# nanoESP32-C3介绍
+nanoESP32-C3 是MuseLab基于乐鑫ESP32-C3模组推出的开发板，板载USB转串口，TYPE-C、全彩LED，引脚兼容官方开发板，板载的下载器支持拖拽烧录和jtag调试，方便客户进行快速的原型验证及开发。
 
-![nanoESP32-S2](https://github.com/wuxx/nanoesp32-s2/blob/master/doc/nanoESP32-S2.jpg)
+![nanoESP32-C3](https://github.com/wuxx/nanoesp32-c3/blob/master/doc/nanoESP32-C3.jpg)
 # 模组规格 
-nanoESP32-S2支持乐鑫官方推出的四种模组，模组之间的差异说明如下
+nanoESP32-C3 开发板使用乐鑫官方模组ESP32-C3-MINI-1, 以下为具体规格参数
 
-模组|PCB天线 | IPEX天线|PSRAM|
-----|----|----|-----|
-ESP32-S2-WROOM | Yes | No |No|
-ESP32-S2-WROOM-I | No  | Yes|No|
-ESP32-S2-WROVER | Yes   | No|Yes|
-ESP32-S2-WROVER-I | No  | Yes | Yes|
+Component|Detail | 
+----|----|
+MCU         | 32bit RISC-V ESP32-C3FN4 up to 160MHz |
+ROM         | 384KB |
+SRAM        | 400KB(16KB for cache) |
+Flash       | 4MB |
+WiFi        | IEEE 802.11bgn |
+Bluetooth   | BLE 5.0 & mesh |
+GPIO        | 22 |
+SPI         | 3 |
+UART        | 2 |
+I2C         | 1 |
+RMT         | 2T+2R |
+DMA         | 3T+3R |
+LED-PWMC    | 6 channel |
+TWAI        | 1 |
+ADC         | 2 x 12bit, 6 channel |
+Temp sensor | 1 |
+Timer       | 6 |
+Security    | OTP/AES/SHA/RSA/RNG/HMAC |
 
-# ESP32-S2 vs ESP32
-ESP32-S2芯片和ESP32相比，差异说明如下
-模组|ESP32 | ESP32-S2|
-----|----|----|
-Microcontroller | Xtensa dual-core 32-bit LX6 | Xtensa single-core 32-bit LX7 |
-Clock Frequency | 160/240 MHz | 160/240 MHz|
-Co-processor | ULP   |  ULP (RISC-V)|
-SRAM | 520 KB| 320 KB |
-ROM | 448 KB| 128 KB |
-RTC Memory | 16 KB| 16 KB |
-External SPIRAM | Up to 16MB| Up to 128MB |
-External Flash | No| Up to 1G |
-Wi-Fi (802.11 b/g/n) | HT20 | HT20 |
-ESP-MESH | Yes| Yes |
-Bluetooth | BT 4.2 BR/EDR & BLE |  No |
-Ethernet | 10/100 Mbps| No |
-CAN | 2.0| No |
-Time of Flight |  No | Yes |
-GPIO (total) | 34| 43 |
-Touch Sensors | 10 | 14 |
-SPI | 4| 4 (OSPI) |
-I2C | 2| 2 |
-I2S | 2| 1 |
-UART | 3 | 2 |
-ADC | 18 (12-bit)| 20 (12-bit) |
-DAC | 2 (8-bit)| 2 (8-bit) |
-PWM (soft) | 16 | 8 |
-SDMMC | Yes| No |
-RMT (remote control) | Yes| Yes |
-USB OTG | No| Yes |
-LCD Interface | No| Yes |
-Camera Interface | No| Yes |
-Temperature sensor | Yes| Yes |
-Hall sensor | Yes| No |
-Security | Secure boot Flash encryption 1024-bit OTP| Secure boot Flash encryption 4096-bit OTP |
-Crypto | AES, SHA-2, RSA, ECC, RNG| AES-128/192/256, SHA-2, RSA, RNG, HMAC, Digital Signature|
-Low Power Consumption | 10uA deep sleep| Automatic RF power management 5uA in idle mode 24uA at 1% duty cycle |
-
-
-# demo说明
-预置的出厂测试固件源码位于demo目录下，上电之后预期RGB LED应该会开始闪烁，两个TYPE-C接口一个为CH340 USB，用于调试下载，另一个为ESP32-S2的USB，若插入ESP32-S2 USB，预期会出现一个名为"ESP32-S2 MSC"的的U盘以及一个CDC串口设备。
-固件编译参考：
+# ESPLink
+nanoESP32-C3 板载一个称之为ESPLink的下载器，支持USB转串口、拖拽烧录、JTAG调试，以下是详细的说明
+## USB-to-Serial
+和传统的使用方式兼容（替代CP2102、CH340之类的USB转串口芯片），可使用esptool.py进行烧录或串口调试，举例如下：  
 ```
-$git clone https://github.com/espressif/esp-idf.git
-$cd /path/to/esp-idf && ./install.sh && . ./export.sh && cd -
-$git clone https://github.com/hathach/tinyusb.git
-$cd tinyusb/examples/device/cdc_msc_freertos/
-$idf.py set-target esp32s2
-$idf.py -p /dev/ttyUSB0 flash monitor
+$idf.py -p /dev/ttyACM0 flash monitor
+$esptool.py --chip esp32c3 \
+           -p /dev/ttyACM0 \
+           -b 115200 \
+           --before=default_reset \
+           --after=hard_reset \
+           --no-stub \
+           write_flash \
+           --flash_mode dio \
+           --flash_freq 80m \
+           --flash_size 2MB \
+           0x0     esp32c3/bootloader.bin \
+           0x8000  esp32c3/partition-table.bin \
+           0x10000 esp32c3/blink_100.bin
+```
+  
+## 拖拽烧录
+板载的下载器ESPLink支持拖拽烧录，将开发板上电之后，PC将会出现一个名为`ESPLink`的虚拟U盘，此时只需将flash镜像文件拖拽至`ESPLink`虚拟U盘中，稍等片刻，即可自动完成烧录。此功能使得烧录无需依赖任何外部工具以及操作系统，
+典型的使用场景列举如下：快速的原型验证、在云端服务器进行编译、然后在任意PC上烧录、或者在商业的产品中实现固件的快速升级。  
+注意：flash镜像文件为三个文件(bootloader.bin/partition-table.bin/app.bin)拼接而成，需要将`bootloader.bin`填充至0x8000，`partition-table.bin`填充至0x10000，然后将三个文件直接合并。tools目录下提供了一个脚本以供使用，举例如下：
+```
+$./tools/esppad.sh bootloader.bin partition-table.bin app.bin flash_image.bin
+```
+
+## JTAG Debug
+ESPLink 支持使用jtag调试ESP32-C3, 对于想学习RISC-V 架构汇编原理图的爱好者非常有用，若您是商用产品的开发者，这也可以方便的让您在系统崩溃时查找原因。具体使用说明如下：  
+### Openocd 安装
+```
+$git clone https://github.com/espressif/openocd-esp32.git
+$cd openocd-esp32
+$./bootstrap
+$./configure --enable-cmsis-dap
+$make -j
+$sudo make install
+```
+
+### 烧录efuse
+efuse JTAG_SEL_ENABLE bit需要烧录来启用jtag功能.
+```
+$espefuse.py -p /dev/ttyACM0 burn_efuse JTAG_SEL_ENABLE
+```
+
+### Attach to ESP32-C3
+将GPIO10 拉低到GND以启用GPIO的JTAG功能，上电开发板然后执行以下脚本，若一切正常，则可检测到ESP32-C3的idcode
+```
+$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg
+Open On-Chip Debugger  v0.10.0-esp32-20201202-30-gddf07692 (2021-03-22-16:48)
+Licensed under GNU GPL v2
+For bug reports, read
+        http://openocd.org/doc/doxygen/bugs.html
+adapter speed: 10000 kHz
+
+force hard breakpoints
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : CMSIS-DAP: SWD  Supported
+Info : CMSIS-DAP: JTAG Supported
+Info : CMSIS-DAP: FW Version = 0255
+Info : CMSIS-DAP: Serial# = 0800000100430028430000014e504332a5a5a5a597969908
+Info : CMSIS-DAP: Interface Initialised (JTAG)
+Info : SWCLK/TCK = 1 SWDIO/TMS = 1 TDI = 1 TDO = 1 nTRST = 0 nRESET = 1
+Info : CMSIS-DAP: Interface ready
+Info : High speed (adapter_khz 10000) may be limited by adapter firmware.
+Info : clock speed 10000 kHz
+Info : cmsis-dap JTAG TLR_RESET
+Info : cmsis-dap JTAG TLR_RESET
+Info : JTAG tap: esp32c3.cpu tap/device found: 0x00005c25 (mfg: 0x612 (Espressif Systems), part: 0x0005, ver: 0x0)
+Info : datacount=2 progbufsize=16
+Info : Examined RISC-V core; found 1 harts
+Info :  hart 0: XLEN=32, misa=0x40101104
+Info : Listening on port 3333 for gdb connections
+```
+
+### Debug
+attach 成功之后，另外打开一个终端窗口，可以使用telnet或者gdb来进行调试
+
+#### Debug with Gdb
+```
+$riscv32-esp-elf-gdb -ex 'target remote 127.0.0.1:3333' ./build/blink.elf
+(gdb) info reg
+(gdb) s
+(gdb) continue
+```
+
+#### Debug with telnet
+```
+$telnet localhost 4444
+>reset
+>halt
+>reg
+>step
+>reg pc
+>resume
+```
 ```
 # 产品链接
-[nanoESP32-S2 Board](https://item.taobao.com/item.htm?id=620291976381)
+[nanoESP32-C3 Board]()
 
 # 参考
 ### esp-idf
 https://github.com/espressif/esp-idf
-### esp32-s2 get-started
-https://docs.espressif.com/projects/esp-idf/en/latest/esp32s2/get-started/
-### esp32-s2
-https://www.espressif.com/zh-hans/products/socs/esp32-s2
+### esp32-c3 get-started
+https://docs.espressif.com/projects/esp-idf/en/latest/esp32c3/get-started/
+### esp32-c3
+https://www.espressif.com/zh-hans/products/socs/esp32-c3
