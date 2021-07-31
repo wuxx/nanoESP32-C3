@@ -10,9 +10,13 @@ nanoESP32-C3
 
 
 # nanoESP32-C3介绍
-nanoESP32-C3 是MuseLab基于乐鑫ESP32-C3模组推出的开发板，板载USB转串口，TYPE-C、全彩LED，引脚兼容官方开发板，板载的下载器支持拖拽烧录和jtag调试，方便客户进行快速的原型验证及开发。
+nanoESP32-C3 是MuseLab基于乐鑫ESP32-C3模组推出的开发板，板载USB转串口，TYPE-C、全彩LED，引脚兼容官方开发板，板载的下载器支持拖拽烧录和jtag调试，方便客户进行快速的原型验证及开发。  
 
-![nanoESP32-C3](https://github.com/wuxx/nanoesp32-c3/blob/main/doc/nanoESP32-C3-1.jpg)
+  
+<div align=center>
+<img src="https://github.com/wuxx/nanoESP32-C3/blob/master/doc/nanoESP32-C3-1.jpg" width = "500" alt="" align=center />
+</div>
+
 # 模组规格 
 nanoESP32-C3 开发板使用乐鑫官方模组ESP32-C3-MINI-1, 以下为具体规格参数
 
