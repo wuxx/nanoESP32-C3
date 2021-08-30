@@ -148,7 +148,7 @@ $idf.py set-target esp32c3
 $idf.py -p /dev/ttyACM0 flash monitor
 ```
 # Product Link
-[nanoESP32-C3 Board](https://www.aliexpress.com/item/1005001403045642.html?gps-id=pcStoreNewArrivals&scm=1007.23409.123629.0&scm_id=1007.23409.123629.0&scm-url=1007.23409.123629.0&pvid=6c59d14d-bb7b-4d0f-b0b8-fc5f6ae78288&spm=a2g0o.store_home.smartNewArrivals_1285899620.1005001403045642)
+[nanoESP32-C3 Board](https://www.aliexpress.com/item/1005003081928629.html?spm=a2g0o.productlist.0.0.4a666866ubSEVc&algo_pvid=f0a84073-dd83-42a1-bf2b-a53530a6cb62&algo_exp_id=f0a84073-dd83-42a1-bf2b-a53530a6cb62-0)
 
 # Reference
 ### esp-idf
