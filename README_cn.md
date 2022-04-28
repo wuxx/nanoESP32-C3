@@ -91,7 +91,7 @@ $espefuse.py -p /dev/ttyACM0 burn_efuse JTAG_SEL_ENABLE
 ### Attach to ESP32-C3
 将GPIO10 拉低到GND以启用GPIO的JTAG功能，上电开发板然后执行以下脚本，若一切正常，则可检测到ESP32-C3的idcode
 ```
-$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg
+$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg -c 'adapter_khz 10000'
 Open On-Chip Debugger  v0.10.0-esp32-20201202-30-gddf07692 (2021-03-22-16:48)
 Licensed under GNU GPL v2
 For bug reports, read

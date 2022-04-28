@@ -89,7 +89,7 @@ $espefuse.py -p /dev/ttyACM0 burn_efuse JTAG_SEL_ENABLE
 ### Attach to ESP32-C3
 set GPIO10 to 0 for choose the GPIO function to JTAG, then power on the board and execute the attach script  
 ```
-$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg
+$sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg -c 'adapter_khz 10000'
 Open On-Chip Debugger  v0.10.0-esp32-20201202-30-gddf07692 (2021-03-22-16:48)
 Licensed under GNU GPL v2
 For bug reports, read
