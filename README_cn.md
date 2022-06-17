@@ -140,9 +140,9 @@ $telnet localhost 4444
 >reg pc
 >resume
 ```
-```
+
 # 产品链接
-[nanoESP32-C3 Board]()
+[nanoESP32-C3 Board](https://item.taobao.com/item.htm?spm=a1z10.5-c.w4002-21349689069.14.146848aeEGVAz9&id=652515479052)
 
 # 参考
 ### esp-idf
