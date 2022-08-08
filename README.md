@@ -1,7 +1,7 @@
 nanoESP32-C3
 -----------
 [中文](./README_cn.md)
-* [nanoESP32-C3 Introduce](#nanoESP32-C3-Introduce) 
+* [nanoESP32-C3 Introduce](#nanoESP32-C3-Introduce)
 * [Module Specifications](#Module-Specifications)
 * [ESPLink](#ESPLink)
 * [Demo](#Demo)
@@ -10,15 +10,15 @@ nanoESP32-C3
 
 
 # nanoESP32-C3 Introduce
-nanoESP32-C3 is ESP32-C3 dev board made by MuseLab, base on ESP32-C3 Modules manufactured by Expressif, with on-board usb-to-serial, TYPE-C, RGB LED,  the on-board programmer ESPLink (based on DAPLink) support usb-to-serial (compatible with traditional use), drag-n-drop program, and jtag debug, made it convenient for development and test.  
+nanoESP32-C3 is ESP32-C3 dev board made by MuseLab, base on ESP32-C3 Modules manufactured by Expressif, with on-board usb-to-serial, TYPE-C, RGB LED,  the on-board programmer ESPLink (based on DAPLink) support usb-to-serial (compatible with traditional use), drag-n-drop program, and jtag debug, made it convenient for development and test.
 
 <div align=center>
 <img src="https://github.com/wuxx/nanoESP32-C3/blob/master/doc/nanoESP32-C3-1.jpg" width = "500" alt="" align=center />
 </div>
 
-# Module Specifications 
-nanoESP32-C3 use the ESP32-C3-MINI-1 module manufactured by Expressif, here are key features   
-Component|Detail | 
+# Module Specifications
+nanoESP32-C3 use the ESP32-C3-MINI-1 module manufactured by Expressif, here are key features
+Component|Detail |
 ----|----|
 MCU         | 32bit RISC-V ESP32-C3FN4 up to 160MHz |
 ROM         | 384KB |
@@ -42,7 +42,7 @@ Security    | OTP/AES/SHA/RSA/RNG/HMAC |
 # ESPLink
 nanoESP32-C3 has an on-board programmer called ESPLink, which has some useful features, here are the detailed explanation
 ## USB-to-Serial
-compatible with the traditional use, can used to program with esptool.py or monitor the serial output message. examples for reference:  
+compatible with the traditional use, can used to program with esptool.py or monitor the serial output message. examples for reference:
 ```
 $idf.py -p /dev/ttyACM0 flash monitor
 $esptool.py --chip esp32c3 \
@@ -59,10 +59,10 @@ $esptool.py --chip esp32c3 \
            0x8000  esp32c3/partition-table.bin \
            0x10000 esp32c3/blink_100.bin
 ```
-  
+
 ## Drag-and-Drop Program
-the ESPLink support drag-n-drop program, after power on the board, a virtual USB Disk named `ESPLink` will appear, just drag the flash image into the ESPLink, wait for some seconds, then the ESPLink will automatically complete the program work. it's very convenient since it's no need to rely on external tools and work well on any platform (Win/Linux/Mac .etc), some typical usage scenarios: quickly verification, compile on cloud server and program on any PC, firmware upgrade when used on commercial products .etc  
-note: the flash image is a splicing of three files (bootloader.bin/partition-table.bin/app.bin), just expand the `bootloader.bin` to size 0x8000, expand the `partition-table.bin` to size 0x10000, and concatenate these three files, use the script `esppad.sh` under tools directory to make it, example for reference:    
+the ESPLink support drag-n-drop program, after power on the board, a virtual USB Disk named `ESPLink` will appear, just drag the flash image into the ESPLink, wait for some seconds, then the ESPLink will automatically complete the program work. it's very convenient since it's no need to rely on external tools and work well on any platform (Win/Linux/Mac .etc), some typical usage scenarios: quickly verification, compile on cloud server and program on any PC, firmware upgrade when used on commercial products .etc
+note: the flash image is a splicing of three files (bootloader.bin/partition-table.bin/app.bin), just expand the `bootloader.bin` to size 0x8000, expand the `partition-table.bin` to size 0x10000, and concatenate these three files, use the script `esppad.sh` under tools directory to make it, example for reference:
 ```
 $./tools/esppad.sh bootloader.bin partition-table.bin app.bin flash_image.bin
 ```
@@ -70,14 +70,35 @@ $./tools/esppad.sh bootloader.bin partition-table.bin app.bin flash_image.bin
 
 ## JTAG Debug
 ESPLink support jtag interface to debug the ESP32-C3, it's useful for those hobbyist who are interested with RISC-V assembly language, or for product developer to fix the bug when system crash, here are the instructions
-### Openocd Install  
+
+### Openocd Install
+
+The pre-compiled package distributed by the openocd-esp32 repository lacks support for ESPLink, so it needs to be compiled manually:
+
 ```
-$git clone https://github.com/espressif/openocd-esp32.git
-$cd openocd-esp32
-$./bootstrap
-$./configure --enable-cmsis-dap
-$make -j
-$sudo make install
+$ git clone https://github.com/espressif/openocd-esp32.git
+$ cd openocd-esp32
+$ git checkout v0.11.0-esp32-20220706
+```
+
+openocd-esp32 is not quite stable, so it is recommended to checkout a specified version like `v0.11.0-esp32-20220706`, be careful not to checkout `v0.11.0`, it lacks support for esp32 targets.
+
+```
+$ ./bootstrap
+```
+
+If an AC_INIT error occurs, change line 2 of configure.ac from `AC_INIT([openocd], [ ]` to `AC_INIT([openocd], [ "" ]` (add the quotes where the version would go).
+
+```
+$ ./configure --enable-cmsis-dap --disable-werror
+$ make -j
+$ sudo make install
+```
+
+If you have multiple custom versions of openocd on your system, it is recommended **not** to run `sudo make install`, just run the above compiled `openocd-esp32/src/openocd` when needed, e.g.
+
+```
+./src/openocd -f interface/cmsis-dap.cfg -f target/esp32c3.cfg -s "tcl" -c 'adapter_khz 10000'
 ```
 
 ### Burn the efuse
@@ -87,7 +108,7 @@ $espefuse.py -p /dev/ttyACM0 burn_efuse JTAG_SEL_ENABLE
 ```
 
 ### Attach to ESP32-C3
-set GPIO10 to 0 for choose the GPIO function to JTAG, then power on the board and execute the attach script  
+set GPIO10 to 0 for choose the GPIO function to JTAG, then power on the board and execute the attach script
 ```
 $sudo openocd -f tcl/interface/cmsis-dap.cfg -f tcl/target/esp32c3.cfg -c 'adapter_khz 10000'
 Open On-Chip Debugger  v0.10.0-esp32-20201202-30-gddf07692 (2021-03-22-16:48)
@@ -139,7 +160,7 @@ $telnet localhost 4444
 ```
 
 # Demo
-The preset factory test firmware is located in the demo directory. expected that the RGB LED should start to flash after power-on, how to compile the source code show here for reference  
+The preset factory test firmware is located in the demo directory. expected that the RGB LED should start to flash after power-on, how to compile the source code show here for reference
 ```
 $git clone https://github.com/espressif/esp-idf.git
 $cd esp-idf && ./install.sh && . ./export.sh
